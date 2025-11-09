@@ -1,30 +1,14 @@
-FROM python:3.13-slim
+# Base image
+FROM python:3.10-slim
 
-ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1
-
+# Set working directory
 WORKDIR /app
 
-# Rakib dependencies muhiim ah oo Koyeb aqbasho
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        bash \
-        git \
-        build-essential \
-        libssl-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy dependencies oo rakib
+# Copy files
 COPY requirements.txt .
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy code-ka intiisa kale
 COPY . .
 
-# Si thunder.sh uu u noqdo executable
-RUN chmod +x thunder.sh
-
-# Start the bot
-CMD ["bash", "thunder.sh"]
-
+# Run the bot
+CMD ["python", "bot.py"]
