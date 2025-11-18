@@ -5,5 +5,5 @@ async def health(request):
 
 async def web_server():
     app = web.Application()
-    app.router.add_get("/", health)  # Health check for Koyeb
+    app.router.add_get("/", health)
     return app
