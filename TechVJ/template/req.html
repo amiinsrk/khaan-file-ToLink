@@ -16,8 +16,29 @@
     <link rel="stylesheet" type='text/css' href="https://drive----google.com/uc?export=view&id=1pVLG4gZy7jdow3sO-wFS06aP_A9QX0O6">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Delius">
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.9/plyr.css" />
+    
+    <!-- Video.js CSS -->
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+    <!-- Theme for Video.js (Forest Theme - Optional but looks good) -->
+    <link href="https://unpkg.com/@videojs/themes@1/dist/forest/index.css" rel="stylesheet">
+
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom VideoJS styling to match dark theme */
+        .video-js .vjs-big-play-button {
+            background-color: rgba(220, 3, 3, 0.8); /* Red tint like your theme */
+            border-color: #fff;
+            border-radius: 50%;
+            width: 2em;
+            height: 2em;
+            line-height: 2em;
+            margin-left: -1em;
+            margin-top: -1em;
+        }
+        .video-js .vjs-control-bar {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+    </style>
 </head>
 
 <body class="bg-black">
@@ -147,8 +168,22 @@
         <!-- Online Video Player -> to be displayed here  -->
         <div class="justify-content-center align-items-center w-100 d-flex  flex-wrap">
             <div class="lg:w-9/12 lg:px-12 lg:py-4 w-full  border border-danger wow animate__animated animate__fadeInLeft">
-                <video id="player" class="player " playsinline controls>
-                    <source src="{{file_url}}" type="video/mp4">
+                <!-- Video.js Player -->
+                <video
+                    id="player"
+                    class="video-js vjs-default-skin vjs-big-play-centered vjs-theme-forest"
+                    controls
+                    preload="auto"
+                    width="640"
+                    height="264"
+                    data-setup='{"fluid": true}'
+                    >
+                    <source src="{{file_url}}" type="video/mp4" />
+                    <p class="vjs-no-js">
+                        To view this video please enable JavaScript, and consider upgrading to a
+                        web browser that
+                        <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                    </p>
                 </video>
             </div>
         </div>
@@ -271,9 +306,6 @@
                             <li class="nav-item justify-center items-center flex"  style="margin-top: -40px;">
                                 <img src="https://i.ibb.co/qJyZWCv/20230629-081948-0000.png" height="140px" class="rounded-3 " alt="logo">
                         </li>
-                        <!-- <li class="nav-item justify-center items-center text-center">
-                            <a  class="nav-link h1 text-center sm:-m-1 -ms-4"><h5><a class="font-bold" href="https://t.me/VJ_Bots" target="_blank">Movies : </a>Run and managed by <a href="https://telegram.me/KingVj01" target="_blank" class="bg-clip-text text-[16px] text-transparent bg-gradient-to-r from-orange-500 to-pink-500">Adil</a> & <a href="https://telegram.me/KingVj01" target="_blank">Indu(<a href="https://telegram.me/KingVj01" target="_blank" class="bg-clip-text text-[16px] text-transparent bg-gradient-to-r from-orange-500 to-pink-500">Tech VJ</a>)</a> </h5></a>
-                        </li> -->
                     </ul>
                 </div>
                 
@@ -315,32 +347,8 @@
 
     </script>
     
-    <script src="https://cdn.plyr.io/3.6.9/plyr.js"></script>
-	<script>
-        const controls = [
-            'play-large',
-            'rewind','play', 
-            'fast-forward', 
-            'progress', 
-            'current-time',
-            'duration',
-            'mute',
-            'volume',
-            'captions',
-            'settings',
-            'pip',
-            'airplay',
-            'download',
-            'fullscreen'
-        ];
-        document.addEventListener('DOMContentLoaded', () => {
-            const player = Plyr.setup('.player', { controls });
-        });
-
-    </script>
-    <!-- iterate animation -->
-
-
+    <!-- Video JS Script -->
+    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
 
 
     <!-- disabling right click -->
@@ -414,5 +422,3 @@
 
 </body>
 </html>
-
-<!--  Don't Remove Credit @VJ_Bot Subscribe YouTube Channel For Amazing Bot @Tech_VJ Ask Doubt on telegram @KingVJ01 -->
