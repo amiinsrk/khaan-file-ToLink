@@ -36,7 +36,8 @@ async def stream_handler(request: web.Request):
     except FIleNotFound as e:
         raise web.HTTPNotFound(text=e.message)
     except (AttributeError, BadStatusLine, ConnectionResetError):
-        pass
+        # Halkan waxaan ka badalnay pass, waxaan ka dhignay jawaab sax ah
+        return web.Response(status=400, text="Connection Error")
     except Exception as e:
         logging.critical(e.with_traceback(None))
         raise web.HTTPInternalServerError(text=str(e))
@@ -58,12 +59,13 @@ async def stream_handler(request: web.Request):
     except FIleNotFound as e:
         raise web.HTTPNotFound(text=e.message)
     except (AttributeError, BadStatusLine, ConnectionResetError):
-        pass
+        # Fix: Return proper response instead of silent crash
+        return web.Response(status=400, text="Stream Connection Lost")
     except Exception as e:
         logging.critical(e.with_traceback(None))
         raise web.HTTPInternalServerError(text=str(e))
 
-class_cache = {}
+# Waan ka saaray Class Cache oo dhibka keenayay RAM-kana buuxinayay
 
 async def media_streamer(request: web.Request, id: int, secure_hash: str):
     range_header = request.headers.get("Range", 0)
@@ -74,16 +76,13 @@ async def media_streamer(request: web.Request, id: int, secure_hash: str):
     if MULTI_CLIENT:
         logging.info(f"Client {index} is now serving {request.remote}")
 
-    if faster_client in class_cache:
-        tg_connect = class_cache[faster_client]
-        logging.debug(f"Using cached ByteStreamer object for client {index}")
-    else:
-        logging.debug(f"Creating new ByteStreamer object for client {index}")
-        tg_connect = ByteStreamer(faster_client)
-        class_cache[faster_client] = tg_connect
-    logging.debug("before calling get_file_properties")
+    # Fix: Always create a fresh streamer to avoid memory leaks
+    # logging.debug(f"Creating new ByteStreamer object for client {index}")
+    tg_connect = ByteStreamer(faster_client)
+    
+    # logging.debug("before calling get_file_properties")
     file_id = await tg_connect.get_file_properties(id)
-    logging.debug("after calling get_file_properties")
+    # logging.debug("after calling get_file_properties")
     
     if file_id.unique_id[:6] != secure_hash:
         logging.debug(f"Invalid hash for message with ID {id}")
