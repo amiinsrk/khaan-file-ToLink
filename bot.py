@@ -4,7 +4,7 @@
 
 # Clone Code Credit : YT - @Tech_VJ / TG - @VJ_Bots / GitHub - @VJBots
 
-import sys, glob, importlib, logging, logging.config, pytz, asyncio, os
+import sys, glob, importlib, logging, logging.config, pytz, asyncio
 from pathlib import Path
 
 # Get logging configurations
@@ -38,17 +38,6 @@ files = glob.glob(ppath)
 TechVJBot.start()
 loop = asyncio.get_event_loop()
 
-# --- QEYBTA CUSUB EE AUTO-RESTART ---
-# Waxaan ku darnay function-kan si uu u nadiifiyo RAM-ka 24-kii saacba mar
-async def auto_restart():
-    while True:
-        await asyncio.sleep(86400) # 86400 ilbiriqsi = 24 saacadood
-        logging.info("Waqtigii dayactirka: Bot-ka waa la Restart-gareynayaa si RAM-ka loo nadiifiyo...")
-        try:
-            os.execl(sys.executable, sys.executable, *sys.argv)
-        except Exception as e:
-            logging.error(f"Khalad ayaa dhacay restart-ga: {e}")
-# ------------------------------------
 
 async def start():
     print('\n')
@@ -82,11 +71,6 @@ async def start():
     await app.setup()
     bind_address = "0.0.0.0"
     await web.TCPSite(app, bind_address, PORT).start()
-    
-    # --- HERE: Start the Auto-Restart Task ---
-    asyncio.create_task(auto_restart())
-    # -----------------------------------------
-    
     await idle()
 
 
@@ -95,3 +79,4 @@ if __name__ == '__main__':
         loop.run_until_complete(start())
     except KeyboardInterrupt:
         logging.info('Service Stopped Bye 👋')
+
