@@ -4,7 +4,7 @@
 
 # Clone Code Credit : YT - @Tech_VJ / TG - @VJ_Bots / GitHub - @VJBots
 
-import sys, glob, importlib, logging, logging.config, pytz, asyncio
+import sys, glob, importlib, logging, logging.config, pytz, asyncio, os
 from pathlib import Path
 
 # Get logging configurations
@@ -38,6 +38,14 @@ files = glob.glob(ppath)
 TechVJBot.start()
 loop = asyncio.get_event_loop()
 
+# --- NEW AUTO RESTART FUNCTION (6 Hours) ---
+async def auto_restart_worker():
+    print("✅ Auto Restart Worker Started: Bot will restart every 6 hours.")
+    # 21600 seconds = 6 Hours
+    await asyncio.sleep(21600)
+    print("♻️ 6 Hours Passed. Restarting Bot now to clean memory...")
+    os.execl(sys.executable, sys.executable, *sys.argv)
+# -------------------------------------------
 
 async def start():
     print('\n')
@@ -71,6 +79,11 @@ async def start():
     await app.setup()
     bind_address = "0.0.0.0"
     await web.TCPSite(app, bind_address, PORT).start()
+    
+    # --- START THE RESTART TIMER ---
+    asyncio.create_task(auto_restart_worker())
+    # -------------------------------
+    
     await idle()
 
 
@@ -79,4 +92,3 @@ if __name__ == '__main__':
         loop.run_until_complete(start())
     except KeyboardInterrupt:
         logging.info('Service Stopped Bye 👋')
-
