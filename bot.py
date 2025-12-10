@@ -1,4 +1,10 @@
-import sys, glob, importlib, logging, logging.config, pytz, asyncio, os, gc
+# Don't Remove Credit @VJ_Botz
+# Subscribe YouTube Channel For Amazing Bot @Tech_VJ
+# Ask Doubt on telegram @KingVJ01
+
+# Clone Code Credit : YT - @Tech_VJ / TG - @VJ_Bots / GitHub - @VJBots
+
+import sys, glob, importlib, logging, logging.config, pytz, asyncio, os
 from pathlib import Path
 
 # Get logging configurations
@@ -32,14 +38,14 @@ files = glob.glob(ppath)
 TechVJBot.start()
 loop = asyncio.get_event_loop()
 
-# --- MEMORY CLEANER (Bedelkii Auto Restart) ---
-# Tani waxay nadiifineysaa Memory-ga iyadoon Bot-ka damin
-async def memory_cleaner():
-    while True:
-        await asyncio.sleep(1800) # 30 daqiiqo kasta
-        n = gc.collect()
-        logging.info(f"♻️ Memory Cleaned: {n} objects collected.")
-# ---------------------------------------------
+# --- NEW AUTO RESTART FUNCTION (6 Hours) ---
+async def auto_restart_worker():
+    print("✅ Auto Restart Worker Started: Bot will restart every 6 hours.")
+    # 21600 seconds = 6 Hours
+    await asyncio.sleep(21600)
+    print("♻️ 6 Hours Passed. Restarting Bot now to clean memory...")
+    os.execl(sys.executable, sys.executable, *sys.argv)
+# -------------------------------------------
 
 async def start():
     print('\n')
@@ -57,13 +63,8 @@ async def start():
             spec.loader.exec_module(load)
             sys.modules["plugins." + plugin_name] = load
             print("Tech VJ Imported => " + plugin_name)
-    
-    # KICINTA PING SERVER (Waa Muhiim)
-    try:
+    if ON_HEROKU:
         asyncio.create_task(ping_server())
-    except Exception as e:
-        print(f"Ping server error: {e}")
-
     me = await TechVJBot.get_me()
     temp.BOT = TechVJBot
     temp.ME = me.id
@@ -74,18 +75,14 @@ async def start():
     now = datetime.now(tz)
     time = now.strftime("%H:%M:%S %p")
     await TechVJBot.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_TXT.format(today, time))
-    
-    # WEB SERVER SETUP
     app = web.AppRunner(await web_server())
     await app.setup()
     bind_address = "0.0.0.0"
-    server_port = int(PORT) # Hubi in PORT uu yahay lambar
-    await web.TCPSite(app, bind_address, server_port).start()
-    print(f"✅ Web Server Started on {bind_address}:{server_port}")
+    await web.TCPSite(app, bind_address, PORT).start()
     
-    # --- Start Memory Cleaner ---
-    asyncio.create_task(memory_cleaner())
-    # ----------------------------
+    # --- START THE RESTART TIMER ---
+    asyncio.create_task(auto_restart_worker())
+    # -------------------------------
     
     await idle()
 
